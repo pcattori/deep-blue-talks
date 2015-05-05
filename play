@@ -1,0 +1,66 @@
+#! /usr/local/bin/python
+# -*- coding: utf-8 -*-
+
+pieces = {
+  'k':'♔',
+  'q':'♕',
+  'r':'♖',
+  'b':'♗',
+  'n':'♘',
+  'p':'♙',
+  'K':'♚',
+  'Q':'♛',
+  'R':'♜',
+  'B':'♝',
+  'N':'♞',
+  'P':'♟'
+}
+
+def write(string):
+  import sys
+  sys.stdout.write(string)
+
+def print_board(board):
+  rows = board.fen().split()[0].split('/')
+  for i in range(len(rows)):
+    print str(8-i) + ' ',
+    for symbol in rows[i]:
+      if symbol in pieces:
+        write(pieces[symbol] + ' ')
+      elif symbol in '12345678':
+        write(int(symbol) * '· ')
+    print
+  print ' ',
+  for col in range(8):
+    print chr(97 + col),
+  print
+
+import chess
+
+board = chess.Board()
+
+moves = []
+
+while True:
+  move = raw_input('# ')
+  if move == 'quit':
+    break
+  if move == 'moves':
+    for i in range(len(moves)):
+      if i % 2 == 0:
+        print '{0}. {1}'.format((i / 2) + 1, moves[i]),
+      else:
+        print moves[i]
+    continue
+  if move == 'board':
+    print_board(board)
+    continue
+  try:
+    board.push_san(move)
+  except ValueError:
+    print 'Invalid or ambiguous move. Try again'
+    continue
+  moves.append(move)
+  if board.is_checkmate():
+    print '#'
+    break
