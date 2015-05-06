@@ -64,10 +64,10 @@ eg. [The Scholar's Mate][scholars mate]
 
 Commands
 --------
-- moves: displays all moves made so far
-- resign: ends the game
-- advice: ask about which move you should make and which move you should watch out for next
-- board: print out the board
+- **moves**: displays all moves made so far
+- **resign**: ends the game
+- **advice**: ask about which move you should make and which move you should watch out for next
+- **board**: print out the board
 
 
 With a GM mind provided by [Stockfish][stockfish]
