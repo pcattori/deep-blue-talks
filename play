@@ -22,7 +22,7 @@ pieces = {
 
 board = chess.Board()
 moves = []
-engine = chess.uci.popen_engine('/Users/pedrocattori/Desktop/stockfish-6-mac/Mac/stockfish-6-64')
+engine = chess.uci.popen_engine('engines/stockfish')
 engine.uci()
 
 def print_board(board):
@@ -58,7 +58,7 @@ while True:
   except EOFError:
     print
     break
-  if cmd == 'quit':
+  if cmd == 'resign':
     break
   elif cmd == 'moves':
     for i in range(len(moves)):
@@ -90,3 +90,5 @@ while True:
       break
     elif board.is_check():
       print '+check'
+    elif board.is_stalemate():
+      print 'stalemate'
