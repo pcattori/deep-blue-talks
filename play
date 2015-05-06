@@ -92,3 +92,4 @@ while True:
       print '+check'
     elif board.is_stalemate():
       print 'stalemate'
+      break
