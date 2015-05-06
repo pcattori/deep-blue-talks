@@ -3,6 +3,14 @@
 If Deep Blue could talk
 =======================
 
+Installation
+------------
+Requires `python-chess`:
+
+```bash
+$ pip install python-chess
+```
+
 Commands
 --------
 - moves
