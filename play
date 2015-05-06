@@ -66,6 +66,7 @@ while True:
         print '{0}. {1}'.format((i / 2) + 1, moves[i]),
       else:
         print moves[i]
+    print
   elif cmd == 'advice':
     engine.position(board)
     best, ponder = engine.go(movetime=500)
