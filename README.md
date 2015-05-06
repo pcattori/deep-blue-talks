@@ -11,6 +11,11 @@ Requires `python-chess`:
 $ pip install python-chess
 ```
 
+Download:
+```bash
+git clone https://github.com/pcattori/deep-blue.git
+```
+
 Then in the `deep-blue` directory:
 
 ```bash
