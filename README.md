@@ -34,17 +34,18 @@ $ python play
 
 Results in:
 ```bash
-8 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 
-7 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 
+8 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
+7 ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 
 6 · · · · · · · · 
 5 · · · · · · · · 
 4 · · · · · · · · 
 3 · · · · · · · · 
-2 ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 
-1 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
+2 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 
+1 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 
   a b c d e f g h
 !
 ```
+[Nota Bene][nb]: Designed for dark background terminals where black pieces show up as white and white pieces show up as black. I have switched the pieces to that the board shows up correctly on dark background terminals. The pieces are *actually* switched and will appear incorrect in light background terminals
 
 Play
 ----
@@ -72,5 +73,6 @@ Commands
 With a GM mind provided by [Stockfish][stockfish]
 
 [python-chess]: https://github.com/niklasf/python-chess
+[nb]: http://en.wikipedia.org/wiki/Nota_bene
 [scholars mate]: http://en.wikipedia.org/wiki/Scholar%27s_mate
 [stockfish]: http://stockfishchess.org/
