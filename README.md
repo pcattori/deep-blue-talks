@@ -11,6 +11,22 @@ Requires `python-chess`:
 $ pip install python-chess
 ```
 
+Then in the `deep-blue` directory:
+
+```bash
+chmod +x play
+```
+
+Run
+---
+```bash
+$ ./play
+```
+or
+```bash
+$ python play
+```
+
 Commands
 --------
 - moves
