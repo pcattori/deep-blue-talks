@@ -3,6 +3,8 @@
 If Deep Blue could talk
 =======================
 
+With a GM mind provided by [Stockfish][stockfish]
+
 Installation
 ------------
 Requires the [chess python package][python-chess]
@@ -70,9 +72,7 @@ Commands
 - **board**: print out the board
 
 
-With a GM mind provided by [Stockfish][stockfish]
-
+[stockfish]: http://stockfishchess.org/
 [python-chess]: https://github.com/niklasf/python-chess
 [nb]: http://en.wikipedia.org/wiki/Nota_bene
 [scholars mate]: http://en.wikipedia.org/wiki/Scholar%27s_mate
-[stockfish]: http://stockfishchess.org/
