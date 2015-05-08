@@ -54,7 +54,7 @@ You should see
   a b c d e f g h
 !
 ```
-[Nota Bene][nb]: Designed for dark background terminals where black pieces show up as white and white pieces show up as black. I have switched the pieces to that the board shows up correctly on dark background terminals. The pieces are *actually* switched and will appear incorrect in light background terminals
+[Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the  `inverted` setting in `play` with your `vim` (or any lesser text editor of your choosing).
 
 Play
 ----

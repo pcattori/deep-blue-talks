@@ -6,20 +6,31 @@ import chess.uci
 from chess.uci import InfoHandler
 import sys
 
+inverted = True
+
 pieces = {
-  'k':'♔',
-  'q':'♕',
-  'r':'♖',
-  'b':'♗',
-  'n':'♘',
-  'p':'♙',
-  'K':'♚',
-  'Q':'♛',
-  'R':'♜',
-  'B':'♝',
-  'N':'♞',
-  'P':'♟'
+  'K':'♔',
+  'Q':'♕',
+  'R':'♖',
+  'B':'♗',
+  'N':'♘',
+  'P':'♙',
+  'k':'♚',
+  'q':'♛',
+  'r':'♜',
+  'b':'♝',
+  'n':'♞',
+  'p':'♟'
 }
+
+def piece(piece):
+  if inverted:
+    if piece.islower():
+      return pieces[piece.upper()]
+    else:
+      return pieces[piece.lower()]
+  else:
+    return pieces[piece]
 
 board = chess.Board()
 moves = []
@@ -50,7 +61,7 @@ def print_board(board):
     print_rank(i)
     for symbol in rows[i]:
       if symbol in pieces:
-        write(pieces[symbol] + ' ')
+        write(piece(symbol) + ' ')
       elif symbol in '12345678':
         write(int(symbol) * '· ')
     print
