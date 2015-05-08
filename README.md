@@ -75,7 +75,7 @@ Commands
 --------
 - **moves**: displays all moves made so far
 - **resign**: ends the game
-- **advice**: ask about which move you should make and which move you should watch out for next
+- **advice**: ask about which moves you should consider
 - **board**: print out the board
 
 [HEAD]: footnote
