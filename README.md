@@ -4,6 +4,7 @@ If Deep Blue could talk
 =======================
 
 With a GM mind provided by [Stockfish][stockfish].
+
 Built with the [chess python package][python-chess].
 
 Installation
@@ -13,12 +14,15 @@ Download:
 git clone https://github.com/pcattori/deep-blue.git
 ```
 
+Move to project:
+```bash
+$ cd deep-blue
+```
+
 Install requirements
 ```bash
 $ pip install -r requirements.txt
 ```
-
-Then, in the `deep-blue` directory:
 
 ```bash
 chmod +x play
