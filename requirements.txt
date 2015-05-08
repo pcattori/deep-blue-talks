@@ -1,0 +1,1 @@
+git+https://github.com/niklasf/python-chess.git@883a491b414ab9c30a2021241ad4d2af2113c868#egg=python-chess

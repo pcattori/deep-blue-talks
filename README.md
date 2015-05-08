@@ -3,22 +3,22 @@
 If Deep Blue could talk
 =======================
 
-With a GM mind provided by [Stockfish][stockfish]
+With a GM mind provided by [Stockfish][stockfish].
+Built with the [chess python package][python-chess].
 
 Installation
 ------------
-Requires the [chess python package][python-chess]
-
-```bash
-$ pip install python-chess
-```
-
 Download:
 ```bash
 git clone https://github.com/pcattori/deep-blue.git
 ```
 
-Then in the `deep-blue` directory:
+Install requirements
+```bash
+$ pip install -r requirements.txt
+```
+
+Then, in the `deep-blue` directory:
 
 ```bash
 chmod +x play
@@ -71,6 +71,7 @@ Commands
 - **advice**: ask about which move you should make and which move you should watch out for next
 - **board**: print out the board
 
+[HEAD]: footnote
 
 [stockfish]: http://stockfishchess.org/
 [python-chess]: https://github.com/niklasf/python-chess

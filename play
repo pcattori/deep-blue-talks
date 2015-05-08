@@ -1,9 +1,20 @@
 #! /usr/local/bin/python
 # -*- coding: utf-8 -*-
 
+# notes:
+# candidate move analyzer (stockfish option: multipv)
+  # try taking material
+  # develop pieces
+  # control center
+  # increase king safety
+  # solidify pawn chain
+  # pin pieces
+
 import chess
 import chess.uci
+from chess.uci import InfoHandler
 import sys
+import time
 
 pieces = {
   'k':'♔',
@@ -22,8 +33,17 @@ pieces = {
 
 board = chess.Board()
 moves = []
+
 engine = chess.uci.popen_engine('engines/stockfish')
+multipv = 3
 engine.uci()
+engine.position(board)
+engine.setoption({'MultiPV':multipv})
+handler = InfoHandler()
+engine.info_handlers.append(handler)
+engine.go(depth=2)
+with handler:
+  print handler.info
 
 def print_board(board):
 
@@ -69,7 +89,7 @@ while True:
     print
   elif cmd == 'advice':
     engine.position(board)
-    best, ponder = engine.go(movetime=500)
+    best, ponder = engine.go(depth=3,movetime=500)
     analysis_board = chess.Board(board.fen())
     analysis_board.push(best)
     print "try:", board.san(best)
@@ -94,3 +114,5 @@ while True:
     elif board.is_stalemate():
       print 'stalemate'
       break
+
+engine.quit()
