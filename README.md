@@ -9,12 +9,12 @@ Built with the [chess python package][python-chess].
 
 Installation
 ------------
-Download:
+Download
 ```bash
 git clone https://github.com/pcattori/deep-blue.git
 ```
 
-Move to project:
+Move to project
 ```bash
 $ cd deep-blue
 ```
@@ -24,21 +24,24 @@ Install requirements
 $ pip install -r requirements.txt
 ```
 
-```bash
-chmod +x play
-```
-
 Run
 ---
-```bash
-$ ./play
-```
-or
 ```bash
 $ python play
 ```
 
-Results in:
+### Alternative
+make `play` executable
+```bash
+chmod +x play
+```
+then run like this
+```bash
+$ ./play
+```
+
+### Output
+You should see
 ```bash
 8 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
 7 ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 
