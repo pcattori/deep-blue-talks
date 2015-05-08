@@ -33,17 +33,13 @@ pieces = {
 
 board = chess.Board()
 moves = []
+candidate_moves = 3
 
 engine = chess.uci.popen_engine('engines/stockfish')
-multipv = 3
 engine.uci()
-engine.position(board)
-engine.setoption({'MultiPV':multipv})
-handler = InfoHandler()
-engine.info_handlers.append(handler)
-engine.go(depth=2)
-with handler:
-  print handler.info
+engine.setoption({'MultiPV':candidate_moves})
+info = InfoHandler()
+engine.info_handlers.append(info)
 
 def print_board(board):
 
@@ -94,6 +90,9 @@ while True:
     analysis_board.push(best)
     print "try:", board.san(best)
     print "watch out for:", analysis_board.san(ponder)
+    with info:
+      for pv in info.info['pv'].values():
+        print "consider:", board.san(pv[0])
   elif cmd == 'board':
     print_board(board)
   else:
