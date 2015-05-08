@@ -54,7 +54,7 @@ You should see
   a b c d e f g h
 !
 ```
-[Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the boolean value of `inverted` setting in `play` with `vim` (or any lesser text editor of your choosing).
+[Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the boolean value of `inverted` setting within `play` with `vim` (or any lesser text editor of your choosing).
 
 Play
 ----
