@@ -58,7 +58,7 @@ You should see
 
 Play
 ----
-Enter moves in SAN
+Enter moves in [SAN][san]
 
 eg. [The Scholar's Mate][scholars mate]
 ```bash
@@ -83,4 +83,5 @@ Commands
 [stockfish]: http://stockfishchess.org/
 [python-chess]: https://github.com/niklasf/python-chess
 [nb]: http://en.wikipedia.org/wiki/Nota_bene
+[san]: http://en.wikipedia.org/wiki/Algebraic_notation_%28chess%29
 [scholars mate]: http://en.wikipedia.org/wiki/Scholar%27s_mate
