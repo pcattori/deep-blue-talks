@@ -30,7 +30,7 @@ Run
 $ python play
 ```
 
-### Alternative
+#### Alternative
 make `play` executable
 ```bash
 chmod +x play
@@ -40,7 +40,7 @@ then run like this
 $ ./play
 ```
 
-### Output
+#### Output
 You should see
 ```bash
 8 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
