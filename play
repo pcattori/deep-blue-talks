@@ -71,7 +71,9 @@ print_board(board)
 
 while True:
   try:
-    cmd = raw_input('! ')
+    move_no = (len(moves) / 2) + 1
+    white_turn = len(moves) % 2 == 0
+    cmd = raw_input('{0}{1} '.format(move_no, '.' if white_turn else '...'))
   except EOFError:
     print
     break
@@ -96,25 +98,6 @@ while True:
         print "consider:", board.san(pv[0])
   elif cmd == 'position':
     # comment on position
-    # king safety
-      # queens on/off board
-      # pawn wall
-      # susceptible backrank
-    # light/dark square weakness
-    # center control
-      # knight on the rim is dim
-    # open/closed position
-    # who's winning?
-      # who's up in material
-      # attacking chances
-    # development
-      # lead in development?
-      # pieces blocked off?
-    # piece hanging?
-      # need to count defenders
-      # check that its not a trap
-      # check that would-be attacker is not pinned
-    # pin / skewer?
     print 'hmmm...'
     continue
   elif cmd == 'board':
@@ -139,3 +122,39 @@ while True:
       break
 
 engine.quit()
+
+# try redraw
+#CURSOR_UP_ONE = '\x1b[1A'
+#ERASE_LINE = '\x1b[2K'
+#print(CURSOR_UP_ONE + ERASE_LINE)
+
+# ideas:
+# TODO(pcattori): develop these into static vs dynamic ideas
+#   eg. positional evaluation vs move evaluation
+#
+# opening/middlegame/endgame
+  # development
+    # lead in development?
+    # pieces blocked off?
+# king safety
+  # queens on/off board
+  # pawn wall
+  # susceptible backrank
+# light/dark square weakness
+# center control
+  # knight on the rim is dim
+# open/closed position
+  # bishop pair vs knights
+# who's winning?
+  # who's up in material
+  # attacking chances
+# piece hanging?
+  # need to count defenders
+  # check that its not a trap
+  # check that would-be attacker is not pinned
+# pin / skewer?
+# pawn structure
+  # isolated pawns
+  # passed pawns
+  # doubled pawns
+# tactic detector
