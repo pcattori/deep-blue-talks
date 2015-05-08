@@ -1,20 +1,10 @@
 #! /usr/local/bin/python
 # -*- coding: utf-8 -*-
 
-# notes:
-# candidate move analyzer (stockfish option: multipv)
-  # try taking material
-  # develop pieces
-  # control center
-  # increase king safety
-  # solidify pawn chain
-  # pin pieces
-
 import chess
 import chess.uci
 from chess.uci import InfoHandler
 import sys
-import time
 
 pieces = {
   'k':'♔',
@@ -93,6 +83,29 @@ while True:
     with info:
       for pv in info.info['pv'].values():
         print "consider:", board.san(pv[0])
+  elif cmd == 'position':
+    # comment on position
+    # king safety
+      # queens on/off board
+      # pawn wall
+      # susceptible backrank
+    # light/dark square weakness
+    # center control
+      # knight on the rim is dim
+    # open/closed position
+    # who's winning?
+      # who's up in material
+      # attacking chances
+    # development
+      # lead in development?
+      # pieces blocked off?
+    # piece hanging?
+      # need to count defenders
+      # check that its not a trap
+      # check that would-be attacker is not pinned
+    # pin / skewer?
+    print 'hmmm...'
+    continue
   elif cmd == 'board':
     print_board(board)
   else:
