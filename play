@@ -54,7 +54,7 @@ def run():
     args = None
     try:
       # TODO: consider readline module to cope with meta/control keys
-      typed = raw_input("dbt> ")
+      typed = raw_input("> ")
     except (EOFError, KeyboardInterrupt):
       print
       quit(0)

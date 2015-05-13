@@ -52,7 +52,7 @@ You should see
 2 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 
 1 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 
   a b c d e f g h
-dbt>
+>
 ```
 [Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the boolean value of the `inverted` setting inside `play` with `vim` (or any lesser text editor of your choosing).
 
