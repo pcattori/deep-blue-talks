@@ -73,10 +73,23 @@ eg. [The Scholar's Mate][scholars mate]
 
 Commands
 --------
+- **help**
 - **moves**: displays all moves made so far
 - **resign**: ends the game
 - **advice**: ask about which moves you should consider
+- **ask**
 - **board**: print out the board
+
+Interesting FEN
+
+```bash
+$ ./play
+$ fen "r1b1kb1r/ppq2ppp/2n2n2/1Bpp4/3pP3/2N2N1P/PPP2PP1/R1BQR1K1 w kq - 0 9"
+$ board
+$ engine MultiPv 5
+$ advice
+$ ask Nh4
+```
 
 [HEAD]: footnote
 
