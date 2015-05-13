@@ -82,7 +82,10 @@ Commands
 - **board**: display the chess board
 - **engine**: configure hackend chess engine
 
-Interesting FEN
+Example Usage
+-------------
+
+Interesting [FEN][fen]
 ```bash
 $ ./play
 $ fen "r1b1kb1r/ppq2ppp/2n2n2/1Bpp4/3pP3/2N2N1P/PPP2PP1/R1BQR1K1 w kq - 0 9"
@@ -99,3 +102,4 @@ $ ask Nh4
 [nb]: http://en.wikipedia.org/wiki/Nota_bene
 [san]: http://en.wikipedia.org/wiki/Algebraic_notation_%28chess%29
 [scholars mate]: http://en.wikipedia.org/wiki/Scholar%27s_mate
+[fen]: http://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
