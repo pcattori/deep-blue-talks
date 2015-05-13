@@ -49,6 +49,7 @@ info = InfoHandler()
 engine.info_handlers.append(info)
 
 def run():
+  print help_text
   while True:
     args = None
     try:

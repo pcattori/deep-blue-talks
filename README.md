@@ -11,12 +11,12 @@ Installation
 ------------
 Download
 ```bash
-git clone https://github.com/pcattori/deep-blue.git
+git clone https://github.com/pcattori/deep-blue-talks.git
 ```
 
 Move to project
 ```bash
-$ cd deep-blue
+$ cd deep-blue-talks
 ```
 
 Install requirements
@@ -52,7 +52,7 @@ You should see
 2 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙ 
 1 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖ 
   a b c d e f g h
-!
+dbt>
 ```
 [Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the boolean value of the `inverted` setting inside `play` with `vim` (or any lesser text editor of your choosing).
 
@@ -62,26 +62,27 @@ Enter moves in [SAN][san]
 
 eg. [The Scholar's Mate][scholars mate]
 ```bash
-! e4
-! e5
-! Qh5
-! Nc6
-! Bc4
-! Nf6
-! Qxf7
+> move e4
+> move e5
+> move Qh5
+> move Nc6
+> move Bc4
+> move Nf6
+> move Qxf7
 ```
 
 Commands
 --------
-- **help**
-- **moves**: displays all moves made so far
+- **help**: see available commands
 - **resign**: ends the game
-- **advice**: ask about which moves you should consider
-- **ask**
-- **board**: print out the board
+- **fen**: get or set FEN
+- **move**: move a piece on the board using SAN
+- **ask**: ask about a particular move
+- **advice**: get advice for what to play next
+- **board**: display the chess board
+- **engine**: configure hackend chess engine
 
 Interesting FEN
-
 ```bash
 $ ./play
 $ fen "r1b1kb1r/ppq2ppp/2n2n2/1Bpp4/3pP3/2N2N1P/PPP2PP1/R1BQR1K1 w kq - 0 9"
