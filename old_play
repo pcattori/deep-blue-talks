@@ -1,0 +1,311 @@
+#! /usr/local/bin/python
+# -*- coding: utf-8 -*-
+
+import chess
+import chess.uci
+from chess.uci import InfoHandler
+import sys
+
+inverted = True
+
+pieces = {
+  'K':'♔',
+  'Q':'♕',
+  'R':'♖',
+  'B':'♗',
+  'N':'♘',
+  'P':'♙',
+  'k':'♚',
+  'q':'♛',
+  'r':'♜',
+  'b':'♝',
+  'n':'♞',
+  'p':'♟'
+}
+
+def run(fen=None):
+  board = chess.Board()
+  if fen:
+    board.set_fen(fen)
+  moves = []
+  num_candidate_moves = 3
+  engine = chess.uci.popen_engine('engines/stockfish')
+  engine.uci()
+  engine.setoption({'MultiPV': num_candidate_moves})
+  info = InfoHandler()
+  engine.info_handlers.append(info)
+  print_board(board)
+  while True:
+    try:
+      move_no = (len(moves) / 2) + 1
+      white_turn = len(moves) % 2 == 0
+      cmd = raw_input('{0}{1} '.format(move_no, '.' if white_turn else '...'))
+    except (EOFError, KeyboardInterrupt):
+      print
+      quit(0)
+    if cmd == 'resign':
+      break
+    elif cmd == 'moves':
+      for i in range(len(moves)):
+        if i % 2 == 0:
+          print '{0}. {1}'.format((i / 2) + 1, moves[i]),
+        else:
+          print moves[i]
+      print
+    elif cmd == 'advice':
+      engine.position(board)
+      best, ponder = engine.go(depth=8,movetime=800)
+      analysis_board = chess.Board(board.fen())
+      analysis_board.push(best)
+      print "try:", board.san(best)
+      print "watch out for:", analysis_board.san(ponder)
+      with info:
+        for pv in info.info['pv'].values():
+          candidate_move = pv[0]
+          print "consider:", board.san(candidate_move)
+          if attacks_center(board, candidate_move):
+            print "\tattacks center"
+          if develops(board, candidate_move):
+            print "\tdevelops a piece"
+          if discovered_check(board, candidate_move):
+            print "\tdiscovered check"
+          if gains_tempo(board, candidate_move):
+            print "\tgains tempo"
+    elif cmd == 'ask':
+      query = raw_input("\t? ")
+      query_move = board.parse_san(query)
+      if attacks_center(board, query_move):
+        print "\tattacks center"
+      if develops(board, query_move):
+        print "\tdevelops a piece"
+      if discovered_check(board, query_move):
+        print "\tdiscovered check"
+      if gains_tempo(board, query_move):
+        print "\tgains tempo"
+    elif cmd == 'position':
+      # comment on position
+      print 'hmmm...'
+      continue
+    elif cmd == 'board':
+      print_board(board)
+    else:
+      try:
+        move = cmd
+        board.push_san(move)
+      except ValueError:
+        print 'Invalid or ambiguous move. Try again'
+        print
+        continue
+      print_board(board)
+      moves.append(move)
+      if board.is_checkmate():
+        print '#checkmate'
+        break
+      elif board.is_check():
+        print '+check'
+      elif board.is_stalemate():
+        print 'stalemate'
+        break
+
+  engine.quit()
+
+def piece(piece):
+  if inverted:
+    if piece.islower():
+      return pieces[piece.upper()]
+    else:
+      return pieces[piece.lower()]
+  else:
+    return pieces[piece]
+
+def print_board(board):
+
+  def write(string):
+    sys.stdout.write(string)
+
+  def print_rank(i):
+    print str(8-i) + ' ',
+
+  def print_files():
+    print ' ',
+    for col in range(8):
+      print chr(97 + col),
+    print
+
+  rows = board.fen().split()[0].split('/')
+  for i in range(len(rows)):
+    print_rank(i)
+    for symbol in rows[i]:
+      if symbol in pieces:
+        write(piece(symbol) + ' ')
+      elif symbol in '12345678':
+        write(int(symbol) * '· ')
+    print
+  print_files()
+
+def piece_value(piece):
+  if piece.piece_type == chess.PAWN:
+    return 1
+  elif piece.piece_type == chess.KNIGHT or piece.piece_type == chess.BISHOP:
+    return 3
+  elif piece.piece_type == chess.ROOK:
+    return 5
+  elif piece.piece_type == chess.QUEEN:
+    return 9
+  return 0
+
+def static(board):
+  pass
+
+def dynamic(board, move):
+  analysis_board = chess.Board(board.fen())
+  analysis_board.push(move)
+
+def attacks_center(board, move):
+  analysis_board = chess.Board(board.fen())
+  analysis_board.push(move)
+  center = [chess.D4, chess.D5, chess.E4, chess.E5]
+  for square in center:
+    if move.to_square in analysis_board.attackers(not analysis_board.turn, square):
+      return True
+  return False
+
+def attacks_squares(board, move):
+  analysis_board = chess.Board(board.fen())
+  analysis_board.push(move)
+  piece = analysis_board.piece_at(move.to_square)
+  attacked_squares = []
+  for square in chess.SQUARES:
+    if move.to_square in analysis_board.attackers(not analysis_board.turn, square):
+      attacked_squares.append(square)
+  return attacked_squares
+
+def develops(board, move):
+  if board.turn == chess.WHITE:
+    first_rank = [chess.A1, chess.B1, chess.C1, chess.D1, chess.E1, chess.F1, chess.G1, chess.H1]
+    if move.from_square in first_rank and board.piece_type_at(move.from_square) != chess.KING:
+      return True
+  else:
+    last_rank = [chess.A8, chess.B8, chess.C8, chess.D8, chess.E8, chess.F8, chess.G8, chess.H8]
+    if move.from_square in last_rank and board.piece_type_at(move.from_square) != chess.KING:
+      return True
+
+def discovered_check(board, move):
+  analysis_board = chess.Board(board.fen())
+  analysis_board.push(move)
+  if analysis_board.is_check():
+    opposing_king = analysis_board.pieces(chess.KING, not board.turn)
+    # TODO: fix this hack
+    for square in opposing_king:
+      attackers = analysis_board.attacker_mask(board.turn, square)
+      return attackers ^ (1 << move.to_square)
+
+def gains_tempo(board, move):
+  # TODO: currently assumes moved piece won't be taken
+  analysis_board = chess.Board(board.fen())
+  analysis_board.push(move)
+  piece = analysis_board.piece_at(move.to_square)
+  for square in attacks_squares(board, move):
+    attacked_piece = analysis_board.piece_at(square)
+    if attacked_piece:
+      if piece_value(attacked_piece) > piece_value(piece):
+        return True
+  return False
+
+
+def blocks_check(board, move):
+  pass
+
+def unchecks(board, move):
+  pass
+
+def improves_king_safety(board, move):
+  queen = board.pieces(chess.QUEEN, not board.turn)
+  if queen:
+    queen_square = queen[0]
+    #if move.to_square == KING
+  # if opponent queen on board
+
+
+def pins(board, piece):
+  #remove piece
+  # check if in check
+  pass
+
+# try redraw
+#CURSOR_UP_ONE = '\x1b[1A'
+#ERASE_LINE = '\x1b[2K'
+#print(CURSOR_UP_ONE + ERASE_LINE)
+
+# ideas:
+# TODO(pcattori): develop these into static vs dynamic ideas
+#   eg. positional evaluation vs move evaluation
+#
+# opening/middlegame/endgame
+  # development
+    # lead in development?
+    # pieces blocked off?
+# king safety
+  # queens on/off board
+  # pawn wall
+  # susceptible backrank
+# piece hanging?
+  # need to count defenders
+  # check that its not a trap
+  # check that would-be attacker is not pinned
+# pin / skewer?
+
+# board-based analysis:
+# king safety
+# who's winning?
+# light/dark square weakness
+# center control
+  # knight on the rim is dim
+# open/closed position
+  # bishop pair vs knights
+  # who's up in material
+  # attacking chances
+# pawn structure
+  # isolated pawns
+  # passed pawns
+  # doubled pawns
+# tactic detector
+
+# move-based analysis:
+# why good move:
+# defends piece
+# pins piece
+  # remove piece
+  # valuable piece is attacked by
+# increase king safety
+# gain tempo
+
+# why bad move:
+# doubles pawns
+# isolated pawn
+# decrease king safety
+# lose tempo
+
+# pins piece:
+  # remove piece. if valuable piece is now attacked, pins piece
+
+# king safety:
+  # if queens are on board:
+    # if castles:
+      # increase king safety
+    # elif moves pawn in front of king:
+      # decreases king safety
+      # if other 2 pawns are in front of king:
+        # prevents backrank mate -> increases king safety
+
+#tempo:
+  # attacks more valuable piece
+  # valuable piece must move
+
+# discovered check
+  # if move doesn't attack king, but king is in check
+
+if len(sys.argv) >= 2:
+  run(sys.argv[1])
+else:
+  run()

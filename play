@@ -1,10 +1,29 @@
 #! /usr/local/bin/python
 # -*- coding: utf-8 -*-
 
+# TODO: use e.strerror for error messages
+
+from analysis import MoveAnalyzer
 import chess
 import chess.uci
 from chess.uci import InfoHandler
+import os
+import shlex
 import sys
+
+help_text = '''
+available commands:
+    help      : see this message
+    resign    : quit the game
+    fen       : set up a position with FEN
+    move      : move a piece on the board
+    ask       : ask about a particular move
+    advice    : get advice for what to play next
+    position  : get positional analysis
+    board     : display the chess board
+    engine    : configure backend chess engine
+    clear     : clears the screen
+'''
 
 inverted = True
 
@@ -23,39 +42,133 @@ pieces = {
   'p':'♟'
 }
 
-def piece(piece):
-  if inverted:
-    if piece.islower():
-      return pieces[piece.upper()]
-    else:
-      return pieces[piece.lower()]
-  else:
-    return pieces[piece]
-
 board = chess.Board()
-moves = []
-candidate_moves = 3
-
 engine = chess.uci.popen_engine('engines/stockfish')
 engine.uci()
-engine.setoption({'MultiPV':candidate_moves})
 info = InfoHandler()
 engine.info_handlers.append(info)
 
-def print_board(board):
+def run():
+  while True:
+    args = None
+    try:
+      # TODO: consider readline module to cope with meta/control keys
+      typed = raw_input("dbt> ")
+    except (EOFError, KeyboardInterrupt):
+      print
+      quit(0)
+    args = shlex.split(typed)
+    if args:
+      parse(args)
 
+def parse(args):
+  cmd = args[0]
+  if cmd == 'help':
+    print help_text
+  elif cmd == 'resign':
+    quit(0)
+  elif cmd == 'fen':
+    set_fen(args)
+  elif cmd == 'move':
+    make_move(args)
+  elif cmd == 'ask':
+    ask(args)
+  elif cmd == 'advice':
+    advice(args)
+  elif cmd == 'position':
+    print args
+  elif cmd == 'board':
+    show_board()
+  elif cmd == 'engine':
+    configure_engine(args)
+  elif cmd == 'clear':
+    os.system(cmd)
+  else:
+    print 'error: unrecognized command {}'.format(cmd)
+    print 'enter "help" to see a list of available commands'
+
+def set_fen(args):
+  usage_text = 'usage: fen <FEN>'
+  if len(args) != 2:
+    print 'error: wrong number of arguments'
+    print usage_text
+  try:
+    board.set_fen(args[1])
+  except ValueError as e:
+    #print repr(e)
+    print 'error: invalid FEN'
+    print usage_text
+
+def make_move(args):
+  usage_text = 'usage: move <san_move>'
+  if len(args) != 2:
+    print 'error: wrong number of arguments'
+    print usage_text
+  try:
+    board.push_san(args[1])
+  except ValueError as e:
+    print 'error: invalid or ambiguous move'
+    print usage_text
+
+def ask(args):
+  move = None
+  try:
+    move = board.parse_san(args[1])
+  except ValueError as e:
+    print 'error: invalid or ambiguous move'
+  if move:
+    comments = analyze(move)
+    print comments
+
+def advice(args):
+  engine.position(board)
+  engine.go(depth=8,movetime=800)
+  with info:
+    print 'consider:'
+    for pv in info.info['pv'].values():
+      candidate_move = pv[0]
+      print "\t{}".format(board.san(candidate_move))
+      comments = analyze(candidate_move)
+      print "\t\t", comments
+
+def position():
+  pass
+
+def analyze(move):
+  analyzer = MoveAnalyzer(board)
+  comments = []
+  if analyzer.controls_center(move):
+    comments.append('controls center')
+  if analyzer.develops(move):
+    comments.append('develops piece')
+  if analyzer.dims_knight(move):
+    comments.append('a knight on the rim is dim')
+  if analyzer.opens_position(move):
+    comments.append('opens position')
+  if analyzer.closes_position(move):
+    comments.append('closes position')
+  return comments
+
+
+def show_board():
+  # TODO: modularize... maybe into its own class?
+  def piece(piece):
+    if inverted:
+      if piece.islower():
+        return pieces[piece.upper()]
+      else:
+        return pieces[piece.lower()]
+    else:
+      return pieces[piece]
   def write(string):
     sys.stdout.write(string)
-
   def print_rank(i):
     print str(8-i) + ' ',
-
   def print_files():
     print ' ',
     for col in range(8):
       print chr(97 + col),
     print
-
   rows = board.fen().split()[0].split('/')
   for i in range(len(rows)):
     print_rank(i)
@@ -67,94 +180,22 @@ def print_board(board):
     print
   print_files()
 
-print_board(board)
-
-while True:
-  try:
-    move_no = (len(moves) / 2) + 1
-    white_turn = len(moves) % 2 == 0
-    cmd = raw_input('{0}{1} '.format(move_no, '.' if white_turn else '...'))
-  except EOFError:
-    print
-    break
-  if cmd == 'resign':
-    break
-  elif cmd == 'moves':
-    for i in range(len(moves)):
-      if i % 2 == 0:
-        print '{0}. {1}'.format((i / 2) + 1, moves[i]),
-      else:
-        print moves[i]
-    print
-  elif cmd == 'advice':
-    engine.position(board)
-    best, ponder = engine.go(depth=3,movetime=500)
-    analysis_board = chess.Board(board.fen())
-    analysis_board.push(best)
-    print "try:", board.san(best)
-    print "watch out for:", analysis_board.san(ponder)
-    with info:
-      for pv in info.info['pv'].values():
-        print "consider:", board.san(pv[0])
-  elif cmd == 'position':
-    # comment on position
-    print 'hmmm...'
-    continue
-  elif cmd == 'board':
-    print_board(board)
-  else:
+def configure_engine(args):
+  # TODO: in-house options?
+  usage_text = 'usage: engine <option_name> <option_value>'
+  if len(args) == 1:
+    print engine.name
+    print usage_text
+  elif len(args) == 3:
     try:
-      move = cmd
-      board.push_san(move)
-    except ValueError:
-      print 'Invalid or ambiguous move. Try again'
-      print
-      continue
-    print_board(board)
-    moves.append(move)
-    if board.is_checkmate():
-      print '#checkmate'
-      break
-    elif board.is_check():
-      print '+check'
-    elif board.is_stalemate():
-      print 'stalemate'
-      break
+      engine.setoption({args[1]: int(args[2])})
+    except ValueError as e:
+      #print repr(e)
+      print 'error: option name or value invalid'
+  else:
+    print 'error: wrong number of arguments'
+    print usage_text
 
-engine.quit()
-
-# try redraw
-#CURSOR_UP_ONE = '\x1b[1A'
-#ERASE_LINE = '\x1b[2K'
-#print(CURSOR_UP_ONE + ERASE_LINE)
-
-# ideas:
-# TODO(pcattori): develop these into static vs dynamic ideas
-#   eg. positional evaluation vs move evaluation
-#
-# opening/middlegame/endgame
-  # development
-    # lead in development?
-    # pieces blocked off?
-# king safety
-  # queens on/off board
-  # pawn wall
-  # susceptible backrank
-# light/dark square weakness
-# center control
-  # knight on the rim is dim
-# open/closed position
-  # bishop pair vs knights
-# who's winning?
-  # who's up in material
-  # attacking chances
-# piece hanging?
-  # need to count defenders
-  # check that its not a trap
-  # check that would-be attacker is not pinned
-# pin / skewer?
-# pawn structure
-  # isolated pawns
-  # passed pawns
-  # doubled pawns
-# tactic detector
+if __name__ == '__main__':
+  # TODO: add 'play against machine' mode
+  run()
