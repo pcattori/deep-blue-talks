@@ -43,11 +43,14 @@ class MoveAnalyzer():
       return move.to_square not in SquareSet(chess.BB_RANK_8)
     return False
 
-  def absolutely_pinned(self, square):
-    return pinned(square, chess.KING)
+  def absolutely_pinned_square(self, square):
+    return pinned_square_type(square, chess.KING)
 
-  def pinned(self, square, piece_type):
-    color = self.board.piece_at_square(square).color
+  def pinned_square_type(self, square, piece_type):
+    piece = self.board.piece_at(square)
+    if not piece:
+      return False
+    color = piece.color
     target_squares = self.board.pieces(piece_type, color)
     if len(target_squares) == 0:
       return False
@@ -56,17 +59,24 @@ class MoveAnalyzer():
       original_target_attackers = self.board.attackers(not color, target_square)
       analysis_board.remove_piece_at(square)
       new_target_attackers = analysis_board.attackers(not color, target_square)
-      if original_target_attackers ^ (original_target_attackers & new_target_attackers):
+      if (~ original_target_attackers) & new_target_attackers:
         return True
     return False
 
-  def discovered_attack(self, move, square):
+  def discovered_attack(self, move, target_square):
+    to_move = self.board.turn
+    original_target_attackers = self.board.attackers(to_move, target_square)
     analysis_board = chess.Board(self.board.fen())
-    original_target_attackers = self.board.attackers(not color, target_square)
-    analysis_board.remove_piece_at(square)
-    new_target_attackers = analysis_board.attackers(not color, target_square)
+    analysis_board.push(move)
+    new_target_attackers = analysis_board.attackers(to_move, target_square)
     new_target_attackers_not_me = new_target_attackers & (~ chess.BB_SQUARES[move.to_square])
-    return original_target_attackers ^ (original_target_attackers & new_target_attackers_not_me)
+    return (~ original_target_attackers) & new_target_attackers_not_me
+
+  def discovered_check(self, move):
+    to_move = self.board.turn
+    opposing_king_squares = self.board.pieces(chess.KING, not to_move)
+    for opposing_king_square in opposing_king_squares:
+      return self.discovered_attack(move, opposing_king_square)
 
   def dims_knight(self, move):
     '''Knight on the rim is dim'''
@@ -98,14 +108,29 @@ class MoveAnalyzer():
   def attacks_along_diagonal(self, move):
     pass
 
-  def pins(self, move, square, piece_type):
+  def pins_square(self, move, square, piece_type):
     analysis_board = chess.Board(self.board.fen())
     analysis_board.push(move)
     analyzer = MoveAnalyzer(analysis_board)
-    return analyzer.pinned(square, piece_type)
+    return analyzer.pinned_square_type(square, piece_type)
 
-  def unpins(self, move, square, piece_type):
-    return not pins(move, square, piece_type)
+  def absolutely_pins_square(self, move, square):
+    return self.pins_square(move, square, chess.KING)
+
+  def absolutely_pins(self, move):
+    for square in self.controls(move):
+      if self.absolutely_pins_square(move, square):
+        return square
+    return False
+
+  def pins(self, move, piece_type):
+    for square in self.controls(move):
+      if self.pins_square(move, square, piece_type):
+        return square
+    return False
+
+  def unpins_square(self, move, square, piece_type):
+    return not pins_square(move, square, piece_type)
 
   # medium
   def skewers(move):
@@ -207,6 +232,10 @@ class MoveAnalyzer():
     pass
 
   def traps(move):
+    pass
+
+  # easy
+  def forks(move):
     pass
 
 class BoardAnalyzer():
