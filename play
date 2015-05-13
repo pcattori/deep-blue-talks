@@ -160,6 +160,10 @@ def analyze(move):
   if queen_pinned_square:
     comments.append('pins {} to queen'.format(\
         chess.SQUARE_NAMES[queen_pinned_square]))
+  if analyzer.checkmate(move):
+    comments.append('delivers checkmate#')
+  elif analyzer.check(move):
+    comments.append('delivers check+')
   return comments
 
 

@@ -5,6 +5,16 @@ class MoveAnalyzer():
   def __init__(self, board):
     self.board = board
 
+  def check(self,move):
+    analysis_board = chess.Board(self.board.fen())
+    analysis_board.push(move)
+    return analysis_board.is_check()
+
+  def checkmate(self, move):
+    analysis_board = chess.Board(self.board.fen())
+    analysis_board.push(move)
+    return analysis_board.is_checkmate()
+
   def controls(self, move):
     '''Returns a set of attacked/defended squares'''
     to_move = self.board.turn
@@ -33,9 +43,13 @@ class MoveAnalyzer():
     pass
 
   def develops(self, move):
+    if self.board.san(move) == 'O-O' or self.board.san(move) == 'O-O-O':
+      return True
     to_move = self.board.turn
     piece_type = self.board.piece_type_at(move.from_square)
-    if piece_type == chess.PAWN or piece_type == chess.KING:
+    if piece_type == chess.ROOK:
+      return True
+    elif piece_type == chess.PAWN or piece_type == chess.KING:
       return False
     if to_move == chess.WHITE:
       return move.from_square in SquareSet(chess.BB_RANK_1)
@@ -59,8 +73,6 @@ class MoveAnalyzer():
       original_target_attackers = self.board.attackers(not color, target_square)
       analysis_board.remove_piece_at(square)
       new_target_attackers = analysis_board.attackers(not color, target_square)
-      for square in new_target_attackers:
-        print "checking if square:", chess.SQUARE_NAMES[square],"is pinned to",chess.PIECE_TYPES[piece_type]
       if (~ original_target_attackers) & new_target_attackers:
         return True
     return False
