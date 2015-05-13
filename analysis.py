@@ -38,9 +38,9 @@ class MoveAnalyzer():
     if piece_type == chess.PAWN or piece_type == chess.KING:
       return False
     if to_move == chess.WHITE:
-      return move.to_square not in SquareSet(chess.BB_RANK_1)
+      return move.from_square in SquareSet(chess.BB_RANK_1)
     elif to_move == chess.BLACK:
-      return move.to_square not in SquareSet(chess.BB_RANK_8)
+      return move.from_square in SquareSet(chess.BB_RANK_8)
     return False
 
   def absolutely_pinned_square(self, square):
@@ -59,6 +59,8 @@ class MoveAnalyzer():
       original_target_attackers = self.board.attackers(not color, target_square)
       analysis_board.remove_piece_at(square)
       new_target_attackers = analysis_board.attackers(not color, target_square)
+      for square in new_target_attackers:
+        print "checking if square:", chess.SQUARE_NAMES[square],"is pinned to",chess.PIECE_TYPES[piece_type]
       if (~ original_target_attackers) & new_target_attackers:
         return True
     return False
@@ -200,8 +202,11 @@ class MoveAnalyzer():
           pawn_attack |= chess.shift_down_left(from_bb_square)
           pawn_attack |= chess.shift_down_right(from_bb_square)
         for square in SquareSet(pawn_attack):
-          if self.board.piece_type_at(square) == chess.PAWN:
-            return True
+          passed_up_piece = self.board.piece_at(square)
+          if passed_up_piece:
+            if passed_up_piece.color != self.board.turn and \
+                passed_up_piece.piece_type == chess.PAWN:
+              return True
     return False
 
   def offers_trade(move):
@@ -236,6 +241,12 @@ class MoveAnalyzer():
 
   # easy
   def forks(move):
+    pass
+
+  def aggressive(move):
+    pass
+
+  def passive(move):
     pass
 
 class BoardAnalyzer():
