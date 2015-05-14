@@ -3,7 +3,7 @@
 
 # TODO: use e.strerror for error messages
 
-from analysis import MoveAnalyzer
+from kasparobot import MoveAnalyzer
 import chess
 import chess.uci
 from chess.uci import InfoHandler
@@ -43,7 +43,7 @@ pieces = {
 }
 
 board = chess.Board()
-engine = chess.uci.popen_engine('engines/stockfish')
+engine = chess.uci.popen_engine('../engines/stockfish')
 engine.uci()
 info = InfoHandler()
 engine.info_handlers.append(info)
@@ -215,5 +215,4 @@ def configure_engine(args):
     print usage_text
 
 if __name__ == '__main__':
-  # TODO: add 'play against machine' mode
   run()
