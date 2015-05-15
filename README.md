@@ -2,6 +2,7 @@
 
 If Deep Blue could talk
 =======================
+[![PyPI version](https://badge.fury.io/py/deep-blue-talks.svg)](http://badge.fury.io/py/deep-blue-talks)
 
 With a GM mind provided by [Stockfish][stockfish].
 
