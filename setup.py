@@ -1,4 +1,5 @@
 from setuptools import setup
+from glob import glob
 
 setup(name='deep-blue-talks',
       version='0.1',
@@ -19,6 +20,9 @@ setup(name='deep-blue-talks',
       author_email='pcattori@gmail.com',
       license='MIT',
       packages=['kasparobot'],
+      package_data={
+          'kasparobot' : ['engines/*']
+      },
       install_requires=[
           'python-chess',
       ],

@@ -3,7 +3,7 @@
 
 # TODO: use e.strerror for error messages
 
-from kasparobot import MoveAnalyzer
+import kasparobot
 import chess
 import chess.uci
 from chess.uci import InfoHandler
@@ -43,7 +43,8 @@ pieces = {
 }
 
 board = chess.Board()
-engine = chess.uci.popen_engine('../engines/stockfish')
+engines_dir = '{}/engines'.format(os.path.dirname(kasparobot.__file__))
+engine = chess.uci.popen_engine('{}/stockfish'.format(engines_dir))
 engine.uci()
 info = InfoHandler()
 engine.info_handlers.append(info)
@@ -139,7 +140,7 @@ def position():
   pass
 
 def analyze(move):
-  analyzer = MoveAnalyzer(board)
+  analyzer = kasparobot.MoveAnalyzer(board)
   comments = []
   if analyzer.controls_center(move):
     comments.append('controls center')
