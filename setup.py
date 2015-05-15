@@ -2,7 +2,7 @@ from setuptools import setup
 from glob import glob
 
 setup(name='deep-blue-talks',
-      version='0.2',
+      version='0.2.2',
       description='bestow speech unto chess engines',
       long_description=open('README.md').read(),
       classifiers=[
