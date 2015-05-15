@@ -78,7 +78,7 @@ def parse(args):
   elif cmd == 'advice':
     advice(args)
   elif cmd == 'position':
-    print args
+    print 'Not implemented. Planned for future release'
   elif cmd == 'board':
     show_board()
   elif cmd == 'engine':
