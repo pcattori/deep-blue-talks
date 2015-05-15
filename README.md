@@ -3,7 +3,7 @@
 If Deep Blue could talk
 =======================
 [![PyPi version](https://pypip.in/v/deep-blue-talks/badge.png)](https://pypi.python.org/pypi/deep-blue-talks/)
-[![PyPi downloads](https://pypip.in/d/deep-blue-talks/badge.png)](https://crate.io/packages/$REPO/)
+[![PyPi downloads](https://pypip.in/d/deep-blue-talks/badge.png)](https://pypi.python.org/pypi/deep-blue-talks/)
 
 With a GM mind provided by [Stockfish][stockfish].
 
