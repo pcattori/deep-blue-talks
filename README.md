@@ -64,7 +64,7 @@ Commands
 - **ask**: ask about a particular move
 - **advice**: get advice for what to play next
 - **board**: display the chess board
-- **engine**: configure hackend chess engine
+- **engine**: configure [UCI][uci] options for backend chess engine
 
 Example Usage
 -------------
@@ -86,4 +86,5 @@ $ ask Nh4
 [nb]: http://en.wikipedia.org/wiki/Nota_bene
 [san]: http://en.wikipedia.org/wiki/Algebraic_notation_%28chess%29
 [scholars mate]: http://en.wikipedia.org/wiki/Scholar%27s_mate
+[uci]: http://wbec-ridderkerk.nl/html/UCIProtocol.html
 [fen]: http://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
