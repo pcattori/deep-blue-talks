@@ -20,7 +20,12 @@ $ deep-blue-talks
 ```
 
 #### Output
-You should see
+If you enter
+```bash
+> board
+```
+
+then you should see
 ```bash
 8 ♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜ 
 7 ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟ 
