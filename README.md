@@ -2,7 +2,8 @@
 
 If Deep Blue could talk
 =======================
-[![PyPI version](https://badge.fury.io/py/deep-blue-talks.svg)](http://badge.fury.io/py/deep-blue-talks)
+[![PyPi version](https://pypip.in/v/deep-blue-talks/badge.png)](https://crate.io/packages/$REPO/)
+[![PyPi downloads](https://pypip.in/d/deep-blue-talks/badge.png)](https://crate.io/packages/$REPO/)
 
 With a GM mind provided by [Stockfish][stockfish].
 
