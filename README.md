@@ -33,7 +33,7 @@ You should see
   a b c d e f g h
 >
 ```
-[Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the boolean value of the `inverted` setting inside `play` with `vim` (or any lesser text editor of your choosing).
+[Nota Bene][nb]: Depending on your terminal, the colors of the pieces may be inverted. To correct this, toggle the boolean value of the `inverted` setting inside `/usr/local/bin/deep-blue-talks` with `vim` (or any lesser text editor of your choosing). This should be fixed for the 0.3 release.
 
 Play
 ----
