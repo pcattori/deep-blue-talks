@@ -9,35 +9,14 @@ Built with the [chess python package][python-chess].
 
 Installation
 ------------
-Download
 ```bash
-git clone https://github.com/pcattori/deep-blue-talks.git
-```
-
-Move to project
-```bash
-$ cd deep-blue-talks
-```
-
-Install requirements
-```bash
-$ pip install -r requirements.txt
+$ pip install deep-blue-talks
 ```
 
 Run
 ---
 ```bash
-$ python play
-```
-
-#### Alternative
-make `play` executable
-```bash
-chmod +x play
-```
-then run like this
-```bash
-$ ./play
+$ deep-blue-talks
 ```
 
 #### Output
